@@ -1,0 +1,47 @@
+#pragma once
+#include <SFML/Graphics.hpp>
+#include "Player.h"
+#include "Constants.h"
+
+using namespace sf;
+
+class Zombie
+{
+private:
+	// Where is this zombie?
+	Vector2f m_Position;
+	Texture m_Texture;
+	// A sprite for the zombie
+	Sprite m_Sprite;
+	// How fast can this one run/crawl?
+	float m_Speed;
+	// How much health has it got?
+	float m_Health;
+	// Is it still alive?
+	bool m_Alive;
+	// Puntuacio diferentes per cada zombie
+	int m_valueZombie;
+	
+	
+
+	// Public prototypes go here
+public:
+	// Constructor
+	Zombie();
+	// Handle when a bullet hits a zombie
+	bool hit();
+	// Find out if the zombie is alive
+	bool isAlive();
+	// Spawn a new zombie
+	void spawn(float startX, float startY, int type, int seed);
+	// Return a rectangle that is the position in the world
+	FloatRect getPosition();
+	// Get a copy of the sprite to draw
+	Sprite getSprite();
+	// Update the zombie each frame
+	void update(float elapsedTime, Vector2f playerLocation);
+	// Obtenir el valor del zombie
+	int GetValueZombie();
+	
+};
+
