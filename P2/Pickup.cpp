@@ -31,9 +31,6 @@ Pickup::Pickup(int type):
 
 void Pickup::setArena(IntRect arena)
 {
-
-	// Copy the details of the arena to the pickup's m_Arena
-
 	m_Arena.position.x = arena.position.x + offestArea; //m_Arena.left = arena.left;
 	m_Arena.size.x = arena.size.x - offestArea; //	m_Arena.width = arena.width;
 	m_Arena.position.y = arena.position.y + offestArea; //m_Arena.top = arena.top;
@@ -51,7 +48,6 @@ void Pickup::spawn()
 	int y = (rand() % m_Arena.size.y);
 
 	// Not currently spawned
-	//m_Spawned = false;
 	m_SecondsSinceSpawn = 0;
 	m_Spawned = true;
 	m_Position.x = x;
@@ -93,7 +89,6 @@ void Pickup::update(float elapsedTime)
 	}
 
 
-	// Do we need to hide a pickup?
 	if (m_SecondsSinceSpawn > m_SecondsToLive && m_Spawned)
 	{
 		// Revove the pickup and put it somewhere else

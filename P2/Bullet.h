@@ -7,25 +7,25 @@ using namespace sf;
 class Bullet
 {
 private:
-	// Where is the bullet?
+	// Bullet position
 	Vector2f m_Position;
 
 	// What each bullet looks like
 	RectangleShape m_BulletShape;
 
-	// Is this bullet currently whizzing through the air
+	// Is this bullet currently in the air
 	bool m_InFlight = false;
 
-	// How fast does a bullet travel?
+	// Bullet speed
 	float m_BulletSpeed = 1000;
 
-	// What fraction of 1 pixel does the bullet travel, 
+
 	// Horizontally and vertically each frame?
 	// These values will be derived from m_BulletSpeed
 	float m_BulletDistanceX;
 	float m_BulletDistanceY;
 
-	// Where is this bullet headed to?
+	// Bullet directions
 	float m_XTarget;
 	float m_YTarget;
 
@@ -35,7 +35,7 @@ private:
 	float m_MaxY;
 	float m_MinY;
 
-	// Public function prototypes go here
+
 public:
 	// The constructor
 	Bullet();
@@ -58,5 +58,4 @@ public:
 
 	// Update the bullet each frame
 	void update(float elapsedTime);
-
 };

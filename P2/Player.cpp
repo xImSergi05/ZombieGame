@@ -1,7 +1,6 @@
 #include "player.h"
 #include "TextureHolder.h"
 
-//Player::Player(const Texture tex) :
 Player::Player() :
 	m_Texture("./graphics/player.png")
 	, m_Sprite(m_Texture)
@@ -15,21 +14,12 @@ Player::Player() :
 	m_Health = START_HEALTH;
 	m_MaxHealth = START_HEALTH;
 
-	// Associate a texture with the sprite
-	// !!Watch this space!!
-	//if (!m_Texture.loadFromFile("./graphics/player.png"));
-	//m_Sprite.setTexture(m_Texture);
-
 	// Set the origin of the sprite to the centre, 
-	// for smooth rotation
 	m_Sprite.setOrigin({ 25, 25 });
-	//spriteCrosshair.setOrigin({ 25, 25 });
-
 }
 
 void Player::spawn(IntRect arena, Vector2f resolution, int tileSize)
 {
-	//m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player.png"));
 	// Place the player in the middle of the arena
 	m_Position.x = arena.size.x / 2;
 	m_Position.y = arena.size.y / 2;
@@ -183,7 +173,6 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 	// Calculate the angle the player is facing
 	float angle = atan2(mousePosition.y - m_Resolution.y / 2,
 		mousePosition.x - m_Resolution.x / 2);
-		//* 180) / 3.141;
 
 	m_Sprite.setRotation(sf::radians(angle));
 }

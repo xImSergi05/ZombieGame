@@ -12,12 +12,13 @@ SoundManager::SoundManager()
     if (!m_PlayerHitBuffer.loadFromFile("sound/player_hit.mp3"))
         std::cerr << "Error cargando player_hit.wav\n";
 
-    // Crear los sf::Sound después de cargar los buffers
+    // Create the Sounds(objects) after loading the buffers
     m_ShootSound = std::make_unique<sf::Sound>(m_ShootBuffer);
     m_ZombieDeathSound = std::make_unique<sf::Sound>(m_ZombieDeathBuffer);
     m_PickupSound = std::make_unique<sf::Sound>(m_PickupBuffer);
     m_PlayerHitSound = std::make_unique<sf::Sound>(m_PlayerHitBuffer);
 }
+
 
 void SoundManager::playShoot() { if (m_ShootSound) m_ShootSound->play(); }
 void SoundManager::playZombieDeath() { if (m_ZombieDeathSound) m_ZombieDeathSound->play(); }

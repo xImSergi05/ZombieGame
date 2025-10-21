@@ -47,9 +47,9 @@ private:
 
 		// Create the background
 		VertexArray background;
+
 		// Load the texture for our background vertex array
 		Texture textureBackground;
-
 		TextureHolder holder;
 		
 		// Prepare for a horde of zombies
@@ -63,23 +63,24 @@ private:
 		int bulletsInClip = 6;
 		int clipSize = 6;
 		float fireRate = 1;
+
 		// When was the fire button last pressed?
 		Time lastPressed;
-		
 		Sprite spriteCrosshair;
 
 		// Create a couple of pickups
-		/*Pickup healthPickup(1);
-		Pickup ammoPickup(2);*/
 		Pickup healthPickup;
 		Pickup ammoPickup;
-
+		
+		//Score variables
 		int score;
 		int hiScore;
 
+		//Create hud
 		View hudView;
 		HUD hud;
 
+		//Create sound Manager
 		SoundManager m_SoundManager;
 		
 		// Creating a randomly generated scrolling background
@@ -88,5 +89,4 @@ private:
 		void render();
 		void processEvents();
 		Zombie* createHorde(int numZombies, IntRect arena);
-	
 };

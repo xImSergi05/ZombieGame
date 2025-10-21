@@ -1,7 +1,5 @@
 #include "bullet.h"
 
-
-// The constructor
 Bullet::Bullet()
 {
 	m_BulletShape.setSize(sf::Vector2f(2, 2));
@@ -42,10 +40,7 @@ void Bullet::shoot(float startX, float startY,
 		m_BulletDistanceY *= -1;
 	}
 
-	// Finally, assign the results to the
-	// member variables
-	//m_XTarget = targetX;
-	//m_YTarget = targetY;
+
 
 	// Set a max range of 1000 pixels
 	float range = 1000;

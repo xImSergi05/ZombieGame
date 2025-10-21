@@ -25,7 +25,6 @@ Game::Game() :
 void Game::run()
 {
 
-	//player = new Player(playerTexture);
 
 	// The main game loop
 	while (window.isOpen())
@@ -35,7 +34,6 @@ void Game::run()
 		render();
 	}
 	delete[] zombies;
-
 }
 void Game::processEvents()
 {
@@ -45,7 +43,6 @@ void Game::processEvents()
 		// Fire a bullet
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 		{
-			//if (gameTimeTotal.asMilliseconds() - lastPressed.asMilliseconds() > 100 / fireRate && bulletsInClip > 0)
 			if (bulletsInClip > 0) {
 				// Pass the centre of the player and the centre of the cross-hair to the shoot function
 				bullets[currentBullet].shoot(player.getCenter().x, player.getCenter().y, mouseWorldPosition.x, mouseWorldPosition.y);
@@ -144,7 +141,7 @@ void Game::processEvents()
 				}
 				else
 				{
-					// Sense munició de reserva
+					// No more ammo
 				}
 			}
 
@@ -152,7 +149,7 @@ void Game::processEvents()
 		}
 		if (Gstate == StateGame::LEVELING_UP)
 		{
-			// Prepare thelevel
+			// Prepare the level
 			// We will modify the next two lines later
 			arena.size.x = 500;//arena.width = 500;
 			arena.size.y = 500;//arena.height = 500;
@@ -221,7 +218,7 @@ void Game::update()
 			}
 		}
 
-		// Dibujar las balas en vuelo
+		// Draw bullets
 		for (int i = 0; i < 100; i++)
 		{
 			if (bullets[i].isInFlight())
@@ -268,7 +265,7 @@ void Game::update()
 					}
 				}
 			}
-		}// End zombie being shot
+		}
 
 		 // Have any zombies touched the player
 		sf::FloatRect boundingBox = player.getSprite().getGlobalBounds();

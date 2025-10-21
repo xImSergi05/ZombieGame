@@ -7,50 +7,45 @@ using namespace sf;
 class Player
 {
 private:
-	// Where is the player
+	// Player position
 	Vector2f m_Position;
 
-	// Of course we will need a sprite
+	// Player sprite
 	Texture m_Texture;
 	Sprite m_Sprite;
 	
-
-
-
-	// What is the screen resolution
+	// Screen resolution
 	Vector2f m_Resolution;
 
-	// What size is the current arena
+	// Arena size
 	IntRect m_Arena;
 
-	// How big is each tile of the arena
+	// Tile size
 	int m_TileSize;
 
-	// Which directions is the player currently moving in
+	// Player direction
 	bool m_UpPressed;
 	bool m_DownPressed;
 	bool m_LeftPressed;
 	bool m_RightPressed;
 
-	// How much health has the player got?
+	// player HP
 	int m_Health;
-	// What is the maximum health the player can have
+
+	// Player max HP
 	int m_MaxHealth;
 
-	// When was the player last hit
+	// Player last hit
 	Time m_LastHit;
 
 	// Speed in pixels per second
 	float m_Speed;
 
-
-	// All our public functions will come next
 public:
 
-	//Player( Texture tex);
 	Player();
-	// And a texture
-	// !!Watch this space!!
+
+	// Player spawn
 	void spawn(IntRect arena, Vector2f resolution, int tileSize);
 
 	// Handle the player getting hit by a zombie
@@ -59,22 +54,22 @@ public:
 	// How long ago was the player last hit
 	Time getLastHitTime();
 
-	// Where is the player
+	// Get player Position
 	FloatRect getPosition();
 
-	// Where is the center of the player
+	// Get player center
 	Vector2f getCenter();
 
-	// Which angle is the player facing
+	// Get where is the player facing
 	float getRotation();
 
 	// Send a copy of the sprite to main
 	Sprite getSprite();
 
-	// How much health has the player currently got?
+	// Get player current HP
 	int getHealth();
 
-	// The next four functions move the player
+	// Move player
 	void moveLeft();
 
 	void moveRight();

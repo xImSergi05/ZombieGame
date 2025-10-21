@@ -9,10 +9,11 @@ class Pickup
 {
 private:
 
-	// The sprite that represents this pickup
+	// Pickup sprite
 	Texture m_Texture;
 	Sprite m_Sprite;
 	Vector2f m_Position;
+
 	// The arena it exists in
 	IntRect m_Arena;
 
@@ -20,7 +21,7 @@ private:
 	int m_Value;
 	int offestArea = 50;
 
-	// What type of pickup is this? 
+	// Type of pickup
 	// 1 = health, 2 = ammo
 	int m_Type;
 
