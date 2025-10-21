@@ -8,6 +8,11 @@
 #include "Pickup.h"
 #include "HUD.h"
 #include "SoundManager.h"
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
+
 
 using namespace sf;
 

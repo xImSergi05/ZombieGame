@@ -1,7 +1,8 @@
 ﻿#include "Game.h"
 #include "Constants.h"
+#include <filesystem>
 Game::Game() :
-	window(VideoMode({ 1920,1080 }), "Zombie Arena", State::Fullscreen)
+	window(VideoMode({ 1920,1080 }), "Zombie Arena", State::Windowed)
 	, mainView(FloatRect({ 0, 0 }, { 1920,1080 }))
 	, hudView(FloatRect({ 0, 0 }, { 1920,1080 }))
 	, spriteCrosshair(TextureHolder::GetTexture("graphics/crosshair.png"))
@@ -389,6 +390,64 @@ void Game::render()
 
 	window.display();
 }
+//===============
+// Background Original
+//==============
+//int Game::createBackground(VertexArray& rVA, IntRect arena)
+//{
+//	//Basic world configuration
+//	int worldWidth = arena.size.x / TILE_SIZE;
+//	int worldHeight = arena.size.y / TILE_SIZE;
+//
+//
+//	rVA.setPrimitiveType(sf::PrimitiveType::Triangles);
+//	// Set the size of the vertex array
+//	rVA.resize(worldWidth * worldHeight * VERTS_IN_QUAD);
+//
+//	// Start at the beginning of the vertex array
+//	int currentVertex = 0;
+//	int verticalOffset;
+//	for (int w = 0; w < worldWidth; w++)
+//	{
+//		for (int h = 0; h < worldHeight; h++)
+//		{
+//			// Triangle 1: v0, v1, v2
+//			rVA[currentVertex + 0].position = sf::Vector2f(w * TILE_SIZE, h * TILE_SIZE);
+//			rVA[currentVertex + 1].position = sf::Vector2f((w * TILE_SIZE) + TILE_SIZE, h * TILE_SIZE);
+//			rVA[currentVertex + 2].position = sf::Vector2f((w * TILE_SIZE) + TILE_SIZE, (h * TILE_SIZE) + TILE_SIZE);
+//			
+//			// Triangle 2: v0, v2, v3
+//			rVA[currentVertex + 3].position = sf::Vector2f(w * TILE_SIZE, h * TILE_SIZE);
+//			rVA[currentVertex + 4].position = sf::Vector2f((w * TILE_SIZE) + TILE_SIZE, (h * TILE_SIZE) + TILE_SIZE);
+//			rVA[currentVertex + 5].position = sf::Vector2f((w * TILE_SIZE), (h * TILE_SIZE) + TILE_SIZE);
+//			// Define the position in the Texture to draw for current quad
+//			// Either mud, stone, grass or wall
+//			if (h == 0 || h == worldHeight - 1 || w == 0 || w == worldWidth - 1)
+//			{
+//				// Triangle 1: v0, v1, v2
+//				verticalOffset = TILE_TYPES * TILE_SIZE;
+//			}
+//			else
+//			{
+//				// Use a random floor texture
+//				srand((int)time(0) + h * w - h);
+//				int mOrG = (rand() % TILE_TYPES);
+//				verticalOffset = mOrG * TILE_SIZE;
+//			}
+//			// Triangle 1: v0, v1, v2
+//			rVA[currentVertex + 0].texCoords = sf::Vector2f(0, 0 + verticalOffset);
+//			rVA[currentVertex + 1].texCoords = sf::Vector2f(TILE_SIZE, 0 + verticalOffset);
+//			rVA[currentVertex + 2].texCoords = sf::Vector2f(TILE_SIZE, TILE_SIZE + verticalOffset);
+//			// Triangle 2: v0, v2, v3
+//			rVA[currentVertex + 3].texCoords = sf::Vector2f(0, 0 + verticalOffset);
+//			rVA[currentVertex + 4].texCoords = sf::Vector2f(TILE_SIZE, TILE_SIZE + verticalOffset);
+//			rVA[currentVertex + 5].texCoords = sf::Vector2f(0, TILE_SIZE + verticalOffset);
+//			// Position ready for the next for vertices
+//			currentVertex = currentVertex + VERTS_IN_QUAD;
+//		}
+//	}
+//	return TILE_SIZE;
+//}
 
 int Game::createBackground(VertexArray& rVA, IntRect arena)
 {
@@ -396,52 +455,110 @@ int Game::createBackground(VertexArray& rVA, IntRect arena)
 	// How big is each tile/texture
 	int worldWidth = arena.size.x / TILE_SIZE;
 	int worldHeight = arena.size.y / TILE_SIZE;
+
 	// What type of primitive are we using?
 	rVA.setPrimitiveType(sf::PrimitiveType::Triangles);
+
 	// Set the size of the vertex array
 	rVA.resize(worldWidth * worldHeight * VERTS_IN_QUAD);
-	// Start at the beginning of the vertex array
-	int currentVertex = 0;
-	int verticalOffset;
-	for (int w = 0; w < worldWidth; w++)
+
+	// --- LLEGIM tiles.txt ---
+	std::vector<std::vector<int>> mapData;
+	std::ifstream inputFile("tiles.txt");
+	std::string line;
+
+	std::cout << "📂 Directori actual: " << std::filesystem::current_path() << std::endl;
+
+	if (!inputFile)
 	{
-		for (int h = 0; h < worldHeight; h++)
+		std::cout << "sNo s'ha pogut obrir tiles.txt. Es generarà un mapa per defecte.\n";
+	}
+	else
+	{
+		while (std::getline(inputFile, line))
 		{
-			// Triangle 1: v0, v1, v2
-			rVA[currentVertex + 0].position = sf::Vector2f(w * TILE_SIZE, h * TILE_SIZE);
-			rVA[currentVertex + 1].position = sf::Vector2f((w * TILE_SIZE) + TILE_SIZE, h * TILE_SIZE);
-			rVA[currentVertex + 2].position = sf::Vector2f((w * TILE_SIZE) + TILE_SIZE, (h * TILE_SIZE) + TILE_SIZE);
-			
-			// Triangle 2: v0, v2, v3
-			rVA[currentVertex + 3].position = sf::Vector2f(w * TILE_SIZE, h * TILE_SIZE);
-			rVA[currentVertex + 4].position = sf::Vector2f((w * TILE_SIZE) + TILE_SIZE, (h * TILE_SIZE) + TILE_SIZE);
-			rVA[currentVertex + 5].position = sf::Vector2f((w * TILE_SIZE), (h * TILE_SIZE) + TILE_SIZE);
-			// Define the position in the Texture to draw for current quad
-			// Either mud, stone, grass or wall
-			if (h == 0 || h == worldHeight - 1 || w == 0 || w == worldWidth - 1)
+			std::stringstream ss(line);
+			std::vector<int> row;
+			int tileType;
+
+			while (ss >> tileType)
 			{
-				// Triangle 1: v0, v1, v2
-				verticalOffset = TILE_TYPES * TILE_SIZE;
+				row.push_back(tileType);
+			}
+
+			if (!row.empty())
+				mapData.push_back(row);
+		}
+		inputFile.close();
+	}
+
+	// DEBUG: Mostra què s'ha llegit
+	std::cout << " Contingut del fitxer tiles.txt (" << mapData.size() << " files):" << std::endl;
+	for (size_t y = 0; y < mapData.size(); y++)
+	{
+		for (size_t x = 0; x < mapData[y].size(); x++)
+		{
+			std::cout << mapData[y][x] << " ";
+		}
+		std::cout << std::endl;
+	}
+
+	// --- DIBUIXAR TILES ---
+	int currentVertex = 0;
+	int verticalOffset = 0;
+	const int WALL_TILE = 4;
+
+	for (int h = 0; h < worldHeight; h++)
+	{
+		for (int w = 0; w < worldWidth; w++)
+		{
+			// Posicions del quad
+			rVA[currentVertex + 0].position = Vector2f(w * TILE_SIZE, h * TILE_SIZE);
+			rVA[currentVertex + 1].position = Vector2f((w + 1) * TILE_SIZE, h * TILE_SIZE);
+			rVA[currentVertex + 2].position = Vector2f((w + 1) * TILE_SIZE, (h + 1) * TILE_SIZE);
+			rVA[currentVertex + 3].position = Vector2f(w * TILE_SIZE, h * TILE_SIZE);
+			rVA[currentVertex + 4].position = Vector2f((w + 1) * TILE_SIZE, (h + 1) * TILE_SIZE);
+			rVA[currentVertex + 5].position = Vector2f(w * TILE_SIZE, (h + 1) * TILE_SIZE);
+
+			int tileType = 0;
+
+			if (!mapData.empty() && h < (int)mapData.size() && w < (int)mapData[h].size())
+			{
+				tileType = mapData[h][w];
 			}
 			else
 			{
-				// Use a random floor texture
-				srand((int)time(0) + h * w - h);
-				int mOrG = (rand() % TILE_TYPES);
-				verticalOffset = mOrG * TILE_SIZE;
+				if (h == 0 || h == worldHeight - 1 || w == 0 || w == worldWidth - 1)
+					tileType = WALL_TILE;
+				else
+					tileType = 0;
 			}
-			// Triangle 1: v0, v1, v2
-			rVA[currentVertex + 0].texCoords = sf::Vector2f(0, 0 + verticalOffset);
-			rVA[currentVertex + 1].texCoords = sf::Vector2f(TILE_SIZE, 0 + verticalOffset);
-			rVA[currentVertex + 2].texCoords = sf::Vector2f(TILE_SIZE, TILE_SIZE + verticalOffset);
-			// Triangle 2: v0, v2, v3
-			rVA[currentVertex + 3].texCoords = sf::Vector2f(0, 0 + verticalOffset);
-			rVA[currentVertex + 4].texCoords = sf::Vector2f(TILE_SIZE, TILE_SIZE + verticalOffset);
-			rVA[currentVertex + 5].texCoords = sf::Vector2f(0, TILE_SIZE + verticalOffset);
-			// Position ready for the next for vertices
-			currentVertex = currentVertex + VERTS_IN_QUAD;
+
+			// Evitem valors fora de rang
+			tileType = std::clamp(tileType, 0, WALL_TILE);
+
+			// Calculem desplaçament vertical
+			verticalOffset = tileType * TILE_SIZE;
+
+			// DEBUG: Mostra els primers tiles
+			if (h < 2 && w < 5)
+			{
+				std::cout << "Tile(" << h << "," << w << ") = " << tileType
+					<< "  offsetY=" << verticalOffset << std::endl;
+			}
+
+			// Coordenades de textura (tiles en VERTICAL)
+			rVA[currentVertex + 0].texCoords = Vector2f(0, verticalOffset);
+			rVA[currentVertex + 1].texCoords = Vector2f(TILE_SIZE, verticalOffset);
+			rVA[currentVertex + 2].texCoords = Vector2f(TILE_SIZE, verticalOffset + TILE_SIZE);
+			rVA[currentVertex + 3].texCoords = Vector2f(0, verticalOffset);
+			rVA[currentVertex + 4].texCoords = Vector2f(TILE_SIZE, verticalOffset + TILE_SIZE);
+			rVA[currentVertex + 5].texCoords = Vector2f(0, verticalOffset + TILE_SIZE);
+
+			currentVertex += VERTS_IN_QUAD;
 		}
 	}
+
 	return TILE_SIZE;
 }
 
